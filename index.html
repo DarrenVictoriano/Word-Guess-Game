@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hangman</title>
+
+    <!-- Font Icons-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Added link to the jQuery Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="./assets/javascript/game.js"></script>
+
+    <!-- Added a link to Bootstrap-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+
+</head>
+
+<body>
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Hangman</h1>
+        <p class="lead">Using your keyboard to enter keys from A-Z, try to guess the word without dying first,</p>
+        <p class="lead">or use the alphabet below to guess the word.</p>
+        <hr class="my-4">
+        <div id="letterBtn"></div>
+        <p class="m-4 h4 font-weight-normal text-center">
+            The chosen category is Animals
+        </p>
+        <div id="letterHolder" class="guessText mt-5"></div>
+        <p class="m-4 h4 font-weight-normal text-center">
+            You have <span id="lives">10 lives</span> remaing
+        </p>
+    </div>
+</body>
+
+</html>
