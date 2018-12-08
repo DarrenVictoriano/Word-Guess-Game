@@ -12,8 +12,6 @@ $(document).ready(function () {
     letterArr = new Array(26).fill(1).map((_, i) => String.fromCharCode(65 + i));
     word = ["dog", "cat", "rabbit", "horse", "snake"];
 
-    // Get DOMs
-    var
 
     // add letters to a buttons
     for (var i = 0; i < letterArr.length; i++) {
