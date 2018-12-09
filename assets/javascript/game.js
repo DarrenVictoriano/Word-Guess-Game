@@ -172,12 +172,7 @@ $(document).ready(function () {
         $("#letterHolder").empty(); // clear the word
         enableTheLetters($(".letter")); // re-enable the buttons
         resetGUI();
-        showTheWord();
-        console.log(winCounter);
-        console.log(lives);
-        console.log(score);
-
-
+        showTheWord(); // get new word
     }
 
     // Start game
