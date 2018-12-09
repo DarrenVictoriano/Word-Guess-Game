@@ -4,10 +4,11 @@ $(document).ready(function () {
     var letterArr; // This will contain the alphabet
     var wordList = [];
     var theWord;
+    var theWordCopy;
     var guess; // Gamers Guess
     var guesses = []; // stored guess to remember which letter already been selected
     var lives = 10; // determines the remaining lives of the gamer
-    var counter; // Count correct guesses
+    var counter = 0; // Count correct guesses
 
 
 
@@ -40,6 +41,7 @@ $(document).ready(function () {
 
     function showTheWord() {
         theWord = getRandomWord().split('');
+        theWordCopy = theWord.slice();
 
         for (var i = 0; i < theWord.length; i++) {
             $("#letterHolder").append($("<span class='px-2 theWord' data-letter=" + theWord[i] + ">_</span>"));
@@ -51,23 +53,20 @@ $(document).ready(function () {
         //get the click
         var theClick = $(this).attr("data-letter");
 
-        // count each click against players life and show it
-        endGame();
-
-        // disable button after clicking
-        disableTheLetters($(this));
-
         // test if click is correct
         for (var i = 0; i < theWord.length; i++) {
             if (theWord[i] == theClick) {
                 $("span[data-letter=" + theClick + "]").text(theClick);
             }
         }
+        // count each click against players life and show it
+        endGame();
 
+        // disable button after clicking
+        disableTheLetters($(this));
     }
 
     function guessTheWordPress(event) {
-        console.log(lives);
         var alphaOnly = /^[a-zA-Z]$/;
         var thePress = event.key.toUpperCase();
         var thePressData = $("button[data-letter=" + thePress + "]");
@@ -77,30 +76,43 @@ $(document).ready(function () {
             return;
         }
 
+        for (var i = 0; i < theWord.length; i++) {
+            if (theWord[i] === thePress) {
+                $("span[data-letter=" + thePress + "]").text(thePress);
+                if (thePressData.attr("disabled") != "disabled") {
+                    counter += 1;
+                }
+            }
+        }
+
         // subtract 1 life per key press
         if (thePressData.attr("disabled") != "disabled") {
             endGame();
         }
 
+        console.log(counter);
         // disable button after pressing
         disableTheLetters(thePressData);
-
-        for (var i = 0; i < theWord.length; i++) {
-            if (theWord[i] == thePress) {
-                $("span[data-letter=" + thePress + "]").text(thePress);
-            }
-        }
     }
 
     function endGame() {
         // make array into string
         var makeTheWord = theWord.join("");
+
+        // life counter
         lives -= 1;
         $("#lives").text(lives);
 
+        // game over if life < 0
         if (lives <= 0) {
             $("#gameStatus").text("Game Over");
             $('<p>The word is \"' + makeTheWord + '\", you stupid!</p >').appendTo("#endGame");
+            disableTheLetters($(".letter"));
+        }
+
+        // win if you get all letters
+        if (counter == theWord.length) {
+            $("#gameStatus").text("Well played!");
             disableTheLetters($(".letter"));
         }
 
