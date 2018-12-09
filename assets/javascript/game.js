@@ -5,9 +5,9 @@ $(document).ready(function () {
     var wordList = []; // array of words
     var theWord; // word to guess later
     var lives = 10; // determines the remaining lives of the gamer
-    var counter = 0; // Count correct guesses to determine the wins
-
-
+    var winCounter = 0; // Count correct guesses to determine the wins
+    var score = 0; // score count
+    var takeLife = true; // takes life only if you pressed a letter that is not in theWord
 
     function initializeLetters() {
         // Add alphabet to lettersArr
@@ -29,6 +29,14 @@ $(document).ready(function () {
         letter.removeClass("btn-dark");
         letter.addClass("btn-danger");
         letter.attr("disabled", "disabled");
+        letter.prop("disabled", true);
+    }
+
+    function enableTheLetters(letter) {
+        letter.removeClass("btn-danger");
+        letter.addClass("btn-dark");
+        letter.attr("disabled", "enabled");
+        letter.prop("disabled", false);
     }
 
     // this will return random word from the array
@@ -62,7 +70,10 @@ $(document).ready(function () {
 
                 // update the underscores if true
                 $("span[data-letter=" + theClick + "]").text(theClick);
-                counter += 1; // add 1 to counter if letters match
+                winCounter += 1; // add 1 to winCounter if letters match
+            } else {
+                // the press is not in theWord then we can take a life
+                takeLife = true;
             }
         }
         // call endGame function to determine the status of the game
@@ -88,46 +99,84 @@ $(document).ready(function () {
 
             // test if keypress is equal to the letter in the word
             if (theWord[i] === thePress) {
+                // not gonna take away life
+                takeLife = false;
 
                 // update underscores if true
                 $("span[data-letter=" + thePress + "]").text(thePress);
 
-                // if the button on screen is not disabled then add counter if its disabled then its already been pressed or clicked
+                // if the button on screen is not disabled then add winCounter if its disabled then its already been pressed or clicked
                 if (thePressData.attr("disabled") != "disabled") {
-                    counter += 1;
+                    winCounter += 1;
                 }
             }
         }
 
-        // subtract 1 life per key press
+        // call endGame function to determine the status of the game
         if (thePressData.attr("disabled") != "disabled") {
+            // this if is to prevent keypress of the same letter to call this more than once
             endGame();
         }
 
         // disable button after pressing to prevent multiple press/click of the same letter
         disableTheLetters(thePressData);
+        console.log(takeLife);
     }
 
     function endGame() {
         // make array into string
         var makeTheWord = theWord.join("");
 
-        // substract 1 everytime this function is called
-        lives -= 1;
-        $("#lives").text(lives);
+        // take life if takeLife variable is true
+        if (takeLife == true) {
+            lives -= 1;
+        }
+
+        // reset the flag back to true
+        takeLife = true;
 
         // game over if life < 0
         if (lives <= 0) {
             $("#gameStatus").text("Game Over");
-            $('<p>The word is \"' + makeTheWord + '\", you stupid!</p >').appendTo("#endGame");
+            $("#whatsTheWord").text("The word is " + makeTheWord);
             disableTheLetters($(".letter"));
         }
 
         // win if you get all letters
-        if (counter == theWord.length) {
+        if (winCounter == theWord.length) {
             $("#gameStatus").text("Well played!");
+            score += 1;
             disableTheLetters($(".letter"));
         }
+
+        // update score board
+        $("#lives").text(lives);
+        $("#scoreHolder").text(score);
+
+    }
+
+    function resetGUI() {
+        $("#gameStatus").text("Life: ");
+        $("<span id='lives'></span>").appendTo("#gameStatus");
+        $("#scoreStatus").text("Score: ");
+        $("<span id='scoreHolder'></span>").appendTo("#scoreStatus");
+        $("#whatsTheWord").text("");
+        $("#lives").text(lives);
+        $("#scoreHolder").text(score);
+    }
+
+    function restartGame() {
+        resetGUI();
+        lives = 10; // reset life back to 10
+        winCounter = 0; // reset winCounter
+        $("#letterHolder").empty(); // clear the word
+        enableTheLetters($(".letter")); // re-enable the buttons
+        resetGUI();
+        showTheWord();
+        console.log(winCounter);
+        console.log(lives);
+        console.log(score);
+
 
     }
 
@@ -135,6 +184,7 @@ $(document).ready(function () {
     initializeLetters()
     showTheWord();
     $(".letter").on("click", guessTheWordClick);
+    $("#play").on("click", restartGame);
     $(document).keypress(guessTheWordPress);
 
 

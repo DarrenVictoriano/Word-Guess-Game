@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    <div class="jumbotron text-center">
+    <div class="jumbotron text-center m-0 p-0">
         <h1 class="display-4">Hangman</h1>
         <p class="lead">Using your keyboard to enter keys from A-Z, try to guess the word without dying first,</p>
         <p class="lead">or use the alphabet below if you prefer clicking shit.</p>
@@ -34,13 +34,21 @@
             <!-- This is where the Guess Word will be -->
         </div>
         <div id="endGame" class="container">
-            <p id="gameStatus" class="m-4 h4 font-weight-normal text-center">
-                You have <span id="lives">10</span> remaining tries
+            <p id="gameStatus" class="m-4 h5 font-weight-normal text-center">
+                Life: <span id="lives"></span>
             </p>
-            <p>Score: </p>
+            <p id="scoreStatus" class="h5 font-weight-normal text-center">
+                Score: <span id="scoreHolder"></span>
+            </p>
+            <p id="whatsTheWord">
+                <!-- This is where the word will show up -->
+            </p>
         </div>
-        <p id="test1"></p>
-        <p id="test2"></p>
+        <div>
+            <button class="btn btn-success m-1 mt-3 play" id="play">
+                Another one!
+            </button>
+        </div>
 
     </div>
 </body>
