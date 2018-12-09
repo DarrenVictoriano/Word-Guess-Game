@@ -27,7 +27,7 @@ $(document).ready(function () {
     }
 
     function getRandomWord() {
-        wordList = ["dog", "cat", "rabbit", "horse", "snake"];
+        wordList = ["dog", "cat", "rabbit", "horse", "mice", "cow", "snake"];
         var x = Math.floor((Math.random() * wordList.length));
         return wordList[x].toUpperCase();
     }
@@ -42,12 +42,21 @@ $(document).ready(function () {
     }
 
     function guessTheWord() {
-        lives -= 1;
-        $("#lives").text(lives);
+        //get the click
         var theClick = $(this).attr("data-letter");
 
+        // count each click against players life and show it
+        lives -= 1;
+        $("#lives").text(lives);
+
+        // disable button after clicking
+        $(this).removeClass("btn-dark");
+        $(this).addClass("btn-danger");
+        $(this).attr("disabled", "disabled");
+
+        // test if click is correct
         for (var i = 0; i < theWord.length; i++) {
-            if (theWord[i] == $(this).attr("data-letter")) {
+            if (theWord[i] == theClick) {
                 $("span[data-letter=" + theClick + "]").text(theClick);
             }
         }
@@ -59,6 +68,26 @@ $(document).ready(function () {
     showTheWord();
     $(".letter").on("click", guessTheWord);
 
+    $(document).keypress(function (event) {
+        var thePress = event.key.toUpperCase();
+        var thePressData = $("button[data-letter=" + thePress + "]");
+
+        if (thePressData.attr("disabled") != "disabled") {
+            lives -= 1;
+            $("#lives").text(lives);
+        }
+
+        thePressData.removeClass("btn-dark");
+        thePressData.addClass("btn-danger");
+        thePressData.attr("disabled", "disabled");
+
+        for (var i = 0; i < theWord.length; i++) {
+            if (theWord[i] == thePress) {
+                $("span[data-letter=" + thePress + "]").text(thePress);
+            }
+        }
+
+    });
 
 
 
