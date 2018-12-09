@@ -56,9 +56,6 @@ $(document).ready(function () {
 
         // disable button after clicking
         disableTheLetters($(this));
-        // $(this).removeClass("btn-dark");
-        // $(this).addClass("btn-danger");
-        // $(this).attr("disabled", "disabled");
 
         // test if click is correct
         for (var i = 0; i < theWord.length; i++) {
@@ -85,9 +82,7 @@ $(document).ready(function () {
             endGame();
         }
 
-        // thePressData.removeClass("btn-dark");
-        // thePressData.addClass("btn-danger");
-        // thePressData.attr("disabled", "disabled");
+        // disable button after pressing
         disableTheLetters(thePressData);
 
         for (var i = 0; i < theWord.length; i++) {
@@ -98,13 +93,17 @@ $(document).ready(function () {
     }
 
     function endGame() {
+        // make array into string
+        var makeTheWord = theWord.join("");
         lives -= 1;
         $("#lives").text(lives);
 
         if (lives <= 0) {
             $("#gameStatus").text("Game Over");
+            $('<p>The word is \"' + makeTheWord + '\", you stupid!</p >').appendTo("#endGame");
             disableTheLetters($(".letter"));
         }
+
     }
 
     // Start game
@@ -112,6 +111,7 @@ $(document).ready(function () {
     showTheWord();
     $(".letter").on("click", guessTheWordClick);
     $(document).keypress(guessTheWordPress);
+
 
 
 
