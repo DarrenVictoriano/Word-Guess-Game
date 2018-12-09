@@ -26,6 +26,12 @@ $(document).ready(function () {
         }
     }
 
+    function disableTheLetters(letter) {
+        letter.removeClass("btn-dark");
+        letter.addClass("btn-danger");
+        letter.attr("disabled", "disabled");
+    }
+
     function getRandomWord() {
         wordList = ["dog", "cat", "rabbit", "horse", "mice", "cow", "snake"];
         var x = Math.floor((Math.random() * wordList.length));
@@ -41,18 +47,18 @@ $(document).ready(function () {
 
     }
 
-    function guessTheWord() {
+    function guessTheWordClick() {
         //get the click
         var theClick = $(this).attr("data-letter");
 
         // count each click against players life and show it
-        lives -= 1;
-        $("#lives").text(lives);
+        endGame();
 
         // disable button after clicking
-        $(this).removeClass("btn-dark");
-        $(this).addClass("btn-danger");
-        $(this).attr("disabled", "disabled");
+        disableTheLetters($(this));
+        // $(this).removeClass("btn-dark");
+        // $(this).addClass("btn-danger");
+        // $(this).attr("disabled", "disabled");
 
         // test if click is correct
         for (var i = 0; i < theWord.length; i++) {
@@ -63,31 +69,52 @@ $(document).ready(function () {
 
     }
 
-    // Start game
-    initializeLetters()
-    showTheWord();
-    $(".letter").on("click", guessTheWord);
-
-    $(document).keypress(function (event) {
+    function guessTheWordPress(event) {
+        console.log(lives);
+        var alphaOnly = /^[a-zA-Z]$/;
         var thePress = event.key.toUpperCase();
         var thePressData = $("button[data-letter=" + thePress + "]");
 
-        if (thePressData.attr("disabled") != "disabled") {
-            lives -= 1;
-            $("#lives").text(lives);
+        // Only listen for an alpha keys
+        if (!alphaOnly.test(thePress)) {
+            return;
         }
 
-        thePressData.removeClass("btn-dark");
-        thePressData.addClass("btn-danger");
-        thePressData.attr("disabled", "disabled");
+        // subtract 1 life per key press
+        if (thePressData.attr("disabled") != "disabled") {
+            endGame();
+        }
+
+        // thePressData.removeClass("btn-dark");
+        // thePressData.addClass("btn-danger");
+        // thePressData.attr("disabled", "disabled");
+        disableTheLetters(thePressData);
 
         for (var i = 0; i < theWord.length; i++) {
             if (theWord[i] == thePress) {
                 $("span[data-letter=" + thePress + "]").text(thePress);
             }
         }
+    }
 
-    });
+    function endGame() {
+        lives -= 1;
+        $("#lives").text(lives);
+
+        if (lives <= 0) {
+            $("#gameStatus").text("Game Over");
+            disableTheLetters($(".letter"));
+        }
+    }
+
+    // Start game
+    initializeLetters()
+    showTheWord();
+    $(".letter").on("click", guessTheWordClick);
+    $(document).keypress(guessTheWordPress);
+
+
+
 
 
 
