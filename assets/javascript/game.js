@@ -1,14 +1,11 @@
 $(document).ready(function () {
 
     // Variable Declarations
-    var letterArr; // This will contain the alphabet
-    var wordList = [];
-    var theWord;
-    var theWordCopy;
-    var guess; // Gamers Guess
-    var guesses = []; // stored guess to remember which letter already been selected
+    var letterArr; // This will contain the alphabet button
+    var wordList = []; // array of words
+    var theWord; // word to guess later
     var lives = 10; // determines the remaining lives of the gamer
-    var counter = 0; // Count correct guesses
+    var counter = 0; // Count correct guesses to determine the wins
 
 
 
@@ -27,58 +24,75 @@ $(document).ready(function () {
         }
     }
 
+    // this takes a button argument then will disable it
     function disableTheLetters(letter) {
         letter.removeClass("btn-dark");
         letter.addClass("btn-danger");
         letter.attr("disabled", "disabled");
     }
 
+    // this will return random word from the array
     function getRandomWord() {
         wordList = ["dog", "cat", "rabbit", "horse", "mice", "cow", "snake"];
         var x = Math.floor((Math.random() * wordList.length));
         return wordList[x].toUpperCase();
     }
 
+    // this will show the work in the DOM
     function showTheWord() {
-        theWord = getRandomWord().split('');
-        theWordCopy = theWord.slice();
+        // get random word then store it in the global var theWord
+        theWord = getRandomWord().split(''); // make it into array
 
+        // place underscore referencing the number of letters
         for (var i = 0; i < theWord.length; i++) {
             $("#letterHolder").append($("<span class='px-2 theWord' data-letter=" + theWord[i] + ">_</span>"));
         }
-
     }
 
+    // This will go the the onclick listener later
     function guessTheWordClick() {
         //get the click
         var theClick = $(this).attr("data-letter");
 
-        // test if click is correct
+        // loop thru all the letters in theWord
         for (var i = 0; i < theWord.length; i++) {
-            if (theWord[i] == theClick) {
+
+            // test if click is equal to the letter in the word
+            if (theWord[i] === theClick) {
+
+                // update the underscores if true
                 $("span[data-letter=" + theClick + "]").text(theClick);
+                counter += 1; // add 1 to counter if letters match
             }
         }
-        // count each click against players life and show it
+        // call endGame function to determine the status of the game
         endGame();
 
-        // disable button after clicking
+        // disable button after clicking so it does not keep substracting from players life
         disableTheLetters($(this));
     }
 
+    // same as above but this is for onKeyup event
     function guessTheWordPress(event) {
-        var alphaOnly = /^[a-zA-Z]$/;
-        var thePress = event.key.toUpperCase();
-        var thePressData = $("button[data-letter=" + thePress + "]");
+        var alphaOnly = /^[a-zA-Z]$/; // regular expressions for alphabets curtesy of Beau
+        var thePress = event.key.toUpperCase(); // convert every keypress into uppercase to match the word so we can compare it later
+        var thePressData = $("button[data-letter=" + thePress + "]"); // this will bind the keypress to the letter button on screen
 
         // Only listen for an alpha keys
         if (!alphaOnly.test(thePress)) {
             return;
         }
 
+        // loop thru all the letters in theWord
         for (var i = 0; i < theWord.length; i++) {
+
+            // test if keypress is equal to the letter in the word
             if (theWord[i] === thePress) {
+
+                // update underscores if true
                 $("span[data-letter=" + thePress + "]").text(thePress);
+
+                // if the button on screen is not disabled then add counter if its disabled then its already been pressed or clicked
                 if (thePressData.attr("disabled") != "disabled") {
                     counter += 1;
                 }
@@ -90,8 +104,7 @@ $(document).ready(function () {
             endGame();
         }
 
-        console.log(counter);
-        // disable button after pressing
+        // disable button after pressing to prevent multiple press/click of the same letter
         disableTheLetters(thePressData);
     }
 
@@ -99,7 +112,7 @@ $(document).ready(function () {
         // make array into string
         var makeTheWord = theWord.join("");
 
-        // life counter
+        // substract 1 everytime this function is called
         lives -= 1;
         $("#lives").text(lives);
 
@@ -123,15 +136,6 @@ $(document).ready(function () {
     showTheWord();
     $(".letter").on("click", guessTheWordClick);
     $(document).keypress(guessTheWordPress);
-
-
-
-
-
-
-
-
-
 
 
 });
