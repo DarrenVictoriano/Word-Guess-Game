@@ -9,9 +9,15 @@ $(document).ready(function () {
     var score = 0; // score count
     var takeLife = true; // takes life only if you pressed a letter that is not in theWord
 
-    // Get Link for another one audio
+    // Get Link for the audio
     var audioNotherOne = document.createElement("audio");
     audioNotherOne.setAttribute("src", "assets/images/another_one.mov");
+
+    var audioWellPlayed = document.createElement("audio");
+    audioWellPlayed.setAttribute("src", "assets/images/well_played.mp3");
+
+    var audioGameOver = document.createElement("audio");
+    audioGameOver.setAttribute("src", "assets/images/game_over.mp3");
 
     function initializeLetters() {
         // Add alphabet to lettersArr
@@ -368,6 +374,7 @@ $(document).ready(function () {
 
         // game over if life < 0
         if (lives <= 0) {
+            audioGameOver.play();
             $("#gameStatus").text("Game Over, Dummy!");
             $("#letterHolder").text(makeTheWord);
             disableTheLetters($(".letter"));
@@ -375,6 +382,7 @@ $(document).ready(function () {
 
         // win if you get all letters
         if (winCounter == theWord.length) {
+            audioWellPlayed.play();
             $("#gameStatus").text("Well played, Son!");
             score += 1;
             disableTheLetters($(".letter"));
