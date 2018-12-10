@@ -9,6 +9,10 @@ $(document).ready(function () {
     var score = 0; // score count
     var takeLife = true; // takes life only if you pressed a letter that is not in theWord
 
+    // Get Link for another one audio
+    var audioNotherOne = document.createElement("audio");
+    audioNotherOne.setAttribute("src", "assets/images/another_one.mov");
+
     function initializeLetters() {
         // Add alphabet to lettersArr
         letterArr = new Array(26).fill(1).map((_, i) => String.fromCharCode(65 + i));
@@ -392,6 +396,7 @@ $(document).ready(function () {
     }
 
     function restartGame() {
+        audioNotherOne.play();
         resetGUI();
         lives = 10; // reset life back to 10
         winCounter = 0; // reset winCounter
