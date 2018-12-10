@@ -375,7 +375,7 @@ $(document).ready(function () {
         // game over if life < 0
         if (lives <= 0) {
             audioGameOver.play();
-            $("#gameStatus").text("Game Over, Dummy!");
+            $("#gameStatus").text("Game Over!");
             $("#letterHolder").text(makeTheWord);
             disableTheLetters($(".letter"));
         }
@@ -383,7 +383,7 @@ $(document).ready(function () {
         // win if you get all letters
         if (winCounter == theWord.length) {
             audioWellPlayed.play();
-            $("#gameStatus").text("Well played, Son!");
+            $("#gameStatus").text("Well played!");
             score += 1;
             disableTheLetters($(".letter"));
         }
