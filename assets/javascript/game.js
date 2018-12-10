@@ -53,7 +53,7 @@ $(document).ready(function () {
 
         // place underscore referencing the number of letters
         for (var i = 0; i < theWord.length; i++) {
-            $("#letterHolder").append($("<span class='px-2 theWord' data-letter=" + theWord[i] + ">_</span>"));
+            $("#letterHolder").append($("<span class='theWord' data-letter=" + theWord[i] + ">_</span>"));
         }
     }
 
@@ -137,14 +137,14 @@ $(document).ready(function () {
 
         // game over if life < 0
         if (lives <= 0) {
-            $("#gameStatus").text("Game Over");
-            $("#whatsTheWord").text("The word is " + makeTheWord);
+            $("#gameStatus").text("Game Over, Dummy!");
+            $("#letterHolder").text(makeTheWord);
             disableTheLetters($(".letter"));
         }
 
         // win if you get all letters
         if (winCounter == theWord.length) {
-            $("#gameStatus").text("Well played!");
+            $("#gameStatus").text("Well played, Son!");
             score += 1;
             disableTheLetters($(".letter"));
         }
@@ -160,7 +160,6 @@ $(document).ready(function () {
         $("<span id='lives'></span>").appendTo("#gameStatus");
         $("#scoreStatus").text("Score: ");
         $("<span id='scoreHolder'></span>").appendTo("#scoreStatus");
-        $("#whatsTheWord").text("");
         $("#lives").text(lives);
         $("#scoreHolder").text(score);
     }
