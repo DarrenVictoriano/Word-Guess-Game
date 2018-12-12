@@ -304,13 +304,12 @@ $(document).ready(function () {
 
             // test if click is equal to the letter in the word
             if (theWord[i] === theClick) {
+                // not gonna take away life
+                takeLife = false;
 
                 // update the underscores if true
                 $("span[data-letter=" + theClick + "]").text(theClick);
                 winCounter += 1; // add 1 to winCounter if letters match
-            } else {
-                // the press is not in theWord then we can take a life
-                takeLife = true;
             }
         }
         // call endGame function to determine the status of the game
